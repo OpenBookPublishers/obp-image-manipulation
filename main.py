@@ -20,10 +20,10 @@ css = '''
 input_filename = os.path.join(os.path.dirname(__file__),
                               'ch1.xhtml')
 
-with open(input_filename, 'r') as file:
+with open(input_filename, 'r') as f:
     
     # Create the soup object    
-    soup = BeautifulSoup(file, features='html.parser')
+    soup = BeautifulSoup(f, features='html.parser')
     
     # Create a <stile> tag and append it in <head>
     style = soup.new_tag('style')
