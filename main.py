@@ -19,6 +19,8 @@ css = '''
 
 input_filename = os.path.join(os.path.dirname(__file__),
                               'ch1.xhtml')
+output_filename = os.path.join(os.path.dirname(__file__),
+                               'output.html')
 
 with open(input_filename, 'r') as f:
     
@@ -69,7 +71,7 @@ with open(input_filename, 'r') as f:
         #~ print(captions[n-1])
         print('')
         
-    output = open('/home/luca/rudy/OEBPS/output.html', 'w')
+    output = open(output_filename, 'w')
     output.write(soup.prettify())
 
         
