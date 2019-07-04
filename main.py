@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+import os
+
 from bs4 import BeautifulSoup, Tag
 
 css = '''
@@ -14,7 +17,8 @@ css = '''
           }
         '''
 
-input_filename = '/home/luca/rudy/OEBPS/ch1.xhtml'
+input_filename = os.path.join(os.path.dirname(__file__),
+                              'ch1.xhtml')
 
 with open(input_filename, 'r') as file:
     
