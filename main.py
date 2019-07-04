@@ -17,34 +17,59 @@ css = '''
           }
         '''
 
-input_filename = os.path.join(os.path.dirname(__file__),
-                              'ch1.xhtml')
-output_filename = os.path.join(os.path.dirname(__file__),
-                               'output.html')
+caption_classes = {'class' : ['caption-left-aligned',
+                              'caption-centered', 
+                              'caption-right-aligned']}
 
-with open(input_filename, 'r') as f:
-    
-    # Create the soup object    
-    soup = BeautifulSoup(f, features='html.parser')
-    
-    # Create a <stile> tag and append it in <head>
-    style = soup.new_tag('style')
-    style.append(css)
-    head = soup.find('head')
-    head.append(style)
 
-    # Harvast all the captions
-    captions = [x for x in soup.find_all('p', {'class' : ['caption-left-aligned',
-                                                          'caption-centered',
-                                                          'caption-right-aligned']})]
-    
-    for n, image in enumerate(soup.find_all('div', {'class' : '_idGenObjectLayout-2'})):
-        
-        #~ print('')
-        #~ print(image)
-        #~ print(captions[n-1])
-        #~ print('')
-        
+def get_image_groups(soup):
+        # Harvast all the captions
+        captions = [x for x in soup.find_all('p', caption_classes)]
+
+
+        for caption in captions:
+            relevant_siblings = []
+            for sibling in caption.previous_siblings:
+                if sibling.name is None:
+                    continue
+                if sibling.name != "div":
+                    break
+                if sibling['class'][0] != "_idGenObjectLayout-2":
+                    raise ValueError("WRONG CLASS")
+                relevant_siblings.append(sibling)
+
+            yield (caption, relevant_siblings)
+
+
+def run():
+
+    input_filename = os.path.join(os.path.dirname(__file__),
+                                  'ch1.xhtml')
+    output_filename = os.path.join(os.path.dirname(__file__),
+                                   'output.html')
+
+    with open(input_filename, 'r') as f:
+
+        # Create the soup object    
+        soup = BeautifulSoup(f, features='html.parser')
+
+        # Create a <stile> tag and append it in <head>
+        style = soup.new_tag('style')
+        style.append(css)
+        head = soup.find('head')
+        head.append(style)
+
+        for image_group in get_image_groups(soup):
+            caption, images = image_group
+            print(caption, images)
+
+
+def write_output():
+    pass
+    #    output = open(output_filename, 'w')
+    #    output.write(soup.prettify())
+
+def manipulate():        
         # Rename the parent div figure and delete attributes
         image.name = 'figure'
         del image['id']
@@ -62,20 +87,8 @@ with open(input_filename, 'r') as f:
         # Delete the uncessesary tags and place the <img> element
         image.clear()
         image.append(img)
-        
-        # Append the caption (stored at n-1)
-        image.append(captions[n-1])
-        
-        print('')
-        print(image)
-        #~ print(captions[n-1])
-        print('')
-        
-    output = open(output_filename, 'w')
-    output.write(soup.prettify())
 
-        
-        
-        
-        
-                    
+
+if __name__ == '__main__':
+    run()
+
