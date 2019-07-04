@@ -14,7 +14,9 @@ css = '''
           }
         '''
 
-with open('/home/luca/rudy/OEBPS/ch1.xhtml', 'r') as file:
+input_filename = '/home/luca/rudy/OEBPS/ch1.xhtml'
+
+with open(input_filename, 'r') as file:
     
     # Create the soup object    
     soup = BeautifulSoup(file, features='html.parser')
