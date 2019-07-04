@@ -18,7 +18,7 @@ css = '''
         '''
 
 caption_classes = {'class' : ['caption-left-aligned',
-                              'caption-centered', 
+                              'caption-centered',
                               'caption-right-aligned']}
 
 
@@ -48,9 +48,9 @@ def run():
     output_filename = os.path.join(os.path.dirname(__file__),
                                    'output.html')
 
-    with open(input_filename, 'r') as f:
+ open(input_filename, 'r') as f:
 
-        # Create the soup object    
+        # Create the soup object
         soup = BeautifulSoup(f, features='html.parser')
 
         # Create a <stile> tag and append it in <head>
@@ -69,21 +69,21 @@ def write_output():
     #    output = open(output_filename, 'w')
     #    output.write(soup.prettify())
 
-def manipulate():        
+def manipulate():
         # Rename the parent div figure and delete attributes
         image.name = 'figure'
         del image['id']
         del image['class']
-        
-        # Store the id of the first child div element for later use 
+
+        # Store the id of the first child div element for later use
         div = image.find('div')
         img_id = div['id']
-        
-        # Extract the <img> tag and insert the img_id attribute    
+
+        # Extract the <img> tag and insert the img_id attribute
         img = image.find('img')
         img['id'] = img_id
         del img['class']
-        
+
         # Delete the uncessesary tags and place the <img> element
         image.clear()
         image.append(img)
@@ -91,4 +91,3 @@ def manipulate():
 
 if __name__ == '__main__':
     run()
-
