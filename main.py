@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-
 import os
-
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
 
 css = '''
           figure {
