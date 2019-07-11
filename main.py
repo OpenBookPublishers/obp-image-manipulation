@@ -8,7 +8,7 @@ css = '''
               border:3px dotted red;
               /*float:right;*/
           }
-          p.caption {
+          p.caption-centered {
               display: table-caption;
               caption-side: bottom;
               border:3px dotted red;
@@ -42,11 +42,11 @@ def get_image_groups(soup):
 def run():
 
     input_filename = os.path.join(os.path.dirname(__file__),
-                                  'ch1.xhtml')
+                                  'test.xhtml')
     output_filename = os.path.join(os.path.dirname(__file__),
                                    'output.html')
 
- open(input_filename, 'r') as f:
+    with open(input_filename, 'r') as f:
 
         # Create the soup object
         soup = BeautifulSoup(f, features='html.parser')
@@ -54,37 +54,44 @@ def run():
         # Create a <stile> tag and append it in <head>
         style = soup.new_tag('style')
         style.append(css)
-        head = soup.find('head')
-        head.append(style)
+        ##head = soup.find('head')
+        ##head.append(style)
 
         for image_group in get_image_groups(soup):
             caption, images = image_group
-            print(caption, images)
-
+            manipulate(soup, caption, images)
 
 def write_output():
     pass
     #    output = open(output_filename, 'w')
     #    output.write(soup.prettify())
 
-def manipulate():
-        # Rename the parent div figure and delete attributes
-        image.name = 'figure'
-        del image['id']
-        del image['class']
+def manipulate(soup, caption, images):
+        figure = images[0]
+        
+        # Rename the parent div to "figure" and delete attributes
+        figure.name = 'figure'
+        del figure['id']
+        del figure['class']
 
         # Store the id of the first child div element for later use
-        div = image.find('div')
+        div = figure.find('div')
         img_id = div['id']
 
         # Extract the <img> tag and insert the img_id attribute
-        img = image.find('img')
+        img = figure.find('img')
         img['id'] = img_id
         del img['class']
 
         # Delete the uncessesary tags and place the <img> element
-        image.clear()
-        image.append(img)
+        figure.clear()
+        figure.append(img)
+
+        # Insert caption
+        caption['class'] = 'caption-centered'
+        figure.append(caption)
+
+        print(soup.prettify())
 
 
 if __name__ == '__main__':
