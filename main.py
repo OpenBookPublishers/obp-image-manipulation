@@ -6,13 +6,15 @@ css = '''
           figure {
               display: table;
               border:3px dotted red;
-              /*float:right;*/
+              float:right;
+              padding: 1.5em 0 1.5em 1.5em;
           }
           p.caption-centered {
               display: table-caption;
               caption-side: bottom;
               border:3px dotted red;
           }
+          /*img {display: block !important}*/
         '''
 
 caption_classes = {'class' : ['caption-left-aligned',
@@ -21,7 +23,7 @@ caption_classes = {'class' : ['caption-left-aligned',
 
 def run():
     input_filename = os.path.join(os.path.dirname(__file__),
-                                  'test2.xhtml')
+                                  'ch1.xhtml')
     output_filename = os.path.join(os.path.dirname(__file__),
                                    'output.html')
 
@@ -32,8 +34,8 @@ def run():
         # Create a <stile> tag and append it in <head>
         style = soup.new_tag('style')
         style.append(css)
-        ##head = soup.find('head')
-        ##head.append(style)
+        head = soup.find('head')
+        head.append(style)
 
         for image_group in get_image_groups(soup):
             caption, images = image_group
