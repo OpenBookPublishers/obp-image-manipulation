@@ -38,7 +38,9 @@ def run():
         for image_group in get_image_groups(soup):
             caption, images = image_group
             manipulate(soup, caption, images)
-            
+
+        write_output(soup, output_filename)
+        
 def get_image_groups(soup):
         # Harvast all the captions
         captions = [x for x in soup.find_all('p', caption_classes)]
@@ -81,10 +83,9 @@ def manipulate(soup, caption, images):
         caption['class'] = 'caption-centered'
         caption.wrap(figure)
         
-def write_output():
-    pass
-    #    output = open(output_filename, 'w')
-    #    output.write(soup.prettify())
+def write_output(soup, output_filename):
+        output = open(output_filename, 'w')
+        output.write(soup.prettify())
 
 if __name__ == '__main__':
     run()
