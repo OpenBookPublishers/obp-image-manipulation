@@ -19,11 +19,29 @@ caption_classes = {'class' : ['caption-left-aligned',
                               'caption-centered',
                               'caption-right-aligned']}
 
+def run():
+    input_filename = os.path.join(os.path.dirname(__file__),
+                                  'test2.xhtml')
+    output_filename = os.path.join(os.path.dirname(__file__),
+                                   'output.html')
 
+    with open(input_filename, 'r') as f:
+        # Create the soup object
+        soup = BeautifulSoup(f, features='html.parser')
+
+        # Create a <stile> tag and append it in <head>
+        style = soup.new_tag('style')
+        style.append(css)
+        ##head = soup.find('head')
+        ##head.append(style)
+
+        for image_group in get_image_groups(soup):
+            caption, images = image_group
+            manipulate(soup, caption, images)
+            
 def get_image_groups(soup):
         # Harvast all the captions
         captions = [x for x in soup.find_all('p', caption_classes)]
-
 
         for caption in captions:
             relevant_siblings = []
@@ -38,61 +56,35 @@ def get_image_groups(soup):
 
             yield (caption, relevant_siblings)
 
+def manipulate(soup, caption, images):
+        # Create the <figure> tag
+        figure = soup.new_tag('figure')
+        
+        for image in images:
+                # Store the id of the first child div element for later use
+                div = image.find('div')
+                img_id = div['id']
+                
+                # Extract the <img> tag and insert the img_id attribute
+                img = image.find('img')
+                img['id'] = img_id
+                del img['class']
 
-def run():
+                # Place the <img> element inside <figure>
+                figure.append(img)
 
-    input_filename = os.path.join(os.path.dirname(__file__),
-                                  'test.xhtml')
-    output_filename = os.path.join(os.path.dirname(__file__),
-                                   'output.html')
+                # Get rid of the whole <div> contained in image
+                image.decompose()
 
-    with open(input_filename, 'r') as f:
-
-        # Create the soup object
-        soup = BeautifulSoup(f, features='html.parser')
-
-        # Create a <stile> tag and append it in <head>
-        style = soup.new_tag('style')
-        style.append(css)
-        ##head = soup.find('head')
-        ##head.append(style)
-
-        for image_group in get_image_groups(soup):
-            caption, images = image_group
-            manipulate(soup, caption, images)
-
+        # Change the class of the caption
+        # and then wrap it around the new <figure>
+        caption['class'] = 'caption-centered'
+        caption.wrap(figure)
+        
 def write_output():
     pass
     #    output = open(output_filename, 'w')
     #    output.write(soup.prettify())
-
-def manipulate(soup, caption, images):
-        figure = images[0]
-        
-        # Rename the parent div to "figure" and delete attributes
-        figure.name = 'figure'
-        del figure['id']
-        del figure['class']
-
-        # Store the id of the first child div element for later use
-        div = figure.find('div')
-        img_id = div['id']
-
-        # Extract the <img> tag and insert the img_id attribute
-        img = figure.find('img')
-        img['id'] = img_id
-        del img['class']
-
-        # Delete the uncessesary tags and place the <img> element
-        figure.clear()
-        figure.append(img)
-
-        # Insert caption
-        caption['class'] = 'caption-centered'
-        figure.append(caption)
-
-        print(soup.prettify())
-
 
 if __name__ == '__main__':
     run()
