@@ -2,20 +2,14 @@
 import os
 from bs4 import BeautifulSoup
 
-css = '''
-          figure {
-              display: table;
-              border:3px dotted red;
-              float:right;
-              padding: 1.5em 0 1.5em 1.5em;
-          }
-          p.caption-centered {
-              display: table-caption;
-              caption-side: bottom;
-              border:3px dotted red;
-          }
-          /*img {display: block !important}*/
-        '''
+css = '''figure {
+             display: table;
+         }
+         p.caption-centered {
+             display: table-caption;
+             caption-side: bottom;
+         }
+      '''
 
 caption_classes = {'class' : ['caption-left-aligned',
                               'caption-centered',
