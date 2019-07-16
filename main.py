@@ -77,7 +77,9 @@ def manipulate(soup, caption, images):
                 # Extract the <img> tag and insert the img_id attribute
                 img = image.find('img')
                 img['id'] = img_id
-                img['class'] = 'image-zoomify'
+                del img['class']
+                img['alt'] = caption.text
+                img['title'] = caption.text
 
                 # Place the <img> element inside <figure>
                 figure.append(img)
