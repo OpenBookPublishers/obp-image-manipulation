@@ -1,9 +1,20 @@
 #!/usr/bin/env python3
 import os
 from bs4 import BeautifulSoup
+import argparse
+
+# Parse input arguments
+parser = argparse.ArgumentParser(description='obp-image-manipulation')
+parser.add_argument('input_file',
+                    help = 'Input file to process')
+parser.add_argument('output_file',
+                    help = 'Output file')
+
+args = parser.parse_args()
 
 css = '''figure {
              display: table;
+             width: 100%;
          }
          p.caption-centered {
              display: table-caption;
@@ -17,9 +28,9 @@ caption_classes = {'class' : ['caption-left-aligned',
 
 def run():
     input_filename = os.path.join(os.path.dirname(__file__),
-                                  'ch1.xhtml')
+                                  args.input_file)
     output_filename = os.path.join(os.path.dirname(__file__),
-                                   'output.html')
+                                   args.output_file)
 
     with open(input_filename, 'r') as f:
         # Create the soup object
@@ -71,7 +82,7 @@ def manipulate(soup, caption, images):
                 # Place the <img> element inside <figure>
                 figure.append(img)
 
-                # Get rid of the whole <div> contained in image
+                # Get rid of the old <div> which contained the image
                 image.decompose()
 
         # Change the class of the caption
