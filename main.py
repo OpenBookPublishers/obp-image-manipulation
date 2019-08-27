@@ -34,7 +34,7 @@ def run():
 
     with open(input_filename, 'r') as f:
         # Create the soup object
-        soup = BeautifulSoup(f, features='html.parser')
+        soup = BeautifulSoup(f, features='html.parser') 
 
         # Create a <stile> tag and append it in <head>
         style = soup.new_tag('style')
@@ -93,8 +93,9 @@ def manipulate(soup, caption, images):
         caption.wrap(figure)
         
 def write_output(soup, output_filename):
-        output = open(output_filename, 'w')
-        output.write(soup.prettify())
+        with open(output_filename, 'wb') as output:
+            raw_soup = soup.encode('utf-16')
+            output.write(raw_soup)
 
 if __name__ == '__main__':
     run()
