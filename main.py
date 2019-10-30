@@ -24,7 +24,8 @@ css = '''figure {
 
 caption_classes = {'class' : ['caption-left-aligned',
                               'caption-centered',
-                              'caption-right-aligned']}
+                              'caption-right-aligned',
+                              'image-caption']}
 
 def run():
     input_filename = os.path.join(os.path.dirname(__file__),
@@ -94,7 +95,7 @@ def manipulate(soup, caption, images):
         
 def write_output(soup, output_filename):
         with open(output_filename, 'wb') as output:
-            raw_soup = soup.encode('utf-16')
+            raw_soup = soup.encode('utf-8')
             output.write(raw_soup)
 
 if __name__ == '__main__':

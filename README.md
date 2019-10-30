@@ -45,3 +45,6 @@ If needed, get tips by:
 ```
 (.venv) $ python3 main.py -h
 ```
+## Troubleshooting
+### Character encoding
+The current version of the script outputs `utf-8` files. If required a different encoding (i.e. `utf-16`), please change this in the last part of `main.py`, when `beautifulsoup` encodes the _soup_ prior writing the output file.
